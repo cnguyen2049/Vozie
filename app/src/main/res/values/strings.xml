@@ -3,6 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="facebook_app_id">Vozie</string>
+    <string name="facebook_app">Vozie</string>
     <color name="teal">#4DB6AC</color>
+
+    <string name ="facebook_app_id"> 743081829152399</string>
 </resources>
