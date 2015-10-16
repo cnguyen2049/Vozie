@@ -24,12 +24,15 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callBackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_main);
         info = (TextView) findViewById(R.id.info);
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        login();
+    }
 
+    public void login(){
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callBackManager = CallbackManager.Factory.create();
         loginButton.registerCallback(callBackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -55,7 +58,6 @@ public class MainActivity extends ActionBarActivity {
         });
 
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callBackManager.onActivityResult(requestCode, resultCode, data);
