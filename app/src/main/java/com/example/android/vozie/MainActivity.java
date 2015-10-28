@@ -5,14 +5,23 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -24,25 +33,55 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
         info = (TextView) findViewById(R.id.info);
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        login();
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login();
+
+            }
+        });
+
     }
 
     public void login(){
-        FacebookSdk.sdkInitialize(getApplicationContext());
         callBackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "user_photos", "public_profile"));
+
         loginButton.registerCallback(callBackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                info.setText(
-                        "User ID: "
-                                + loginResult.getAccessToken().getUserId()
-                                + "\n"
-                                + "Auth Token: "
-                                + loginResult.getAccessToken().getToken()
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+
+                            public void onCompleted(JSONObject json, GraphResponse response) {
+                                if (response.getError() != null) {
+                                    //handle error
+                                } else {
+                                    //success
+                                    try {
+                                        String jsonresult = String.valueOf(json);
+                                        String name = json.getString("name");
+                                        String email = json.getString("email");
+                                        String id = json.getString("id");
+                                        setText(id,name,email);
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
+                        }
                 );
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email");
+                request.setParameters(parameters);
+                request.executeAsync();
             }
 
             @Override
@@ -57,6 +96,10 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+    }
+
+    public void setText(String str1, String str2, String str3){
+        info.setText("ID: " + str1 + "\n NAME:  " + str2 + "\n EMAIL: " + str3);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
