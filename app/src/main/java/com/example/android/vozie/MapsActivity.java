@@ -1,5 +1,7 @@
 package com.example.android.vozie;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.location.Location;
@@ -79,6 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    /* Animated movement to desired address */
     public void moveToAddress(Address input) {
         Double lat = (double) (input.getLatitude());
         Double lon = (double) (input.getLongitude());
@@ -92,5 +95,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mainMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
 
         mainMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+    }
+
+    /* Opens default navigation to navigate to specified coordinates  */
+    public void navigateToCoordinates(double lat, double lon) {
+        String format = "geo:0,0?q=" + lat + "," + lon + "( Location title)";
+
+        Uri uri = Uri.parse(format);
+
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
