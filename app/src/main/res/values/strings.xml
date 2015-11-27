@@ -5,4 +5,16 @@
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">Vozie</string>
     <color name="teal">#4DB6AC</color>
+
+    <string name="month_prompt">Pick Month</string>
+    <string-array name="planets_array">
+            <item>Mercury</item>
+            <item>Venus</item>
+            <item>Earth</item>
+            <item>Mars</item>
+            <item>Jupiter</item>
+            <item>Saturn</item>
+            <item>Uranus</item>
+            <item>Neptune</item>
+    </string-array>
 </resources>

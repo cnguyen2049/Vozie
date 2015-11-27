@@ -2,12 +2,16 @@ package com.example.android.vozie;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import com.facebook.FacebookSdk;
 
 public class MainActivity extends AppCompatActivity{
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,5 +40,21 @@ public class MainActivity extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public String processText(View view){
+
+        EditText cardNameField = (EditText) findViewById(R.id.card_name);
+        String cardName = cardNameField.getText().toString();
+
+        EditText cardNumberField = (EditText) findViewById(R.id.card_number);
+        String cardNumber = cardNumberField.getText().toString();
+
+        EditText securityCodeField = (EditText) findViewById(R.id.security_code);
+        String securityCode = securityCodeField.getText().toString();
+        String output = cardName + " " + cardNumber + " " + securityCode;
+        Log.v(LOG_TAG, output);
+
+        return output;
     }
 }
