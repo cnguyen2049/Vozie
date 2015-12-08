@@ -23,13 +23,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
-            android:hint="NAME HERE" />
+            android:hint="Name On the Card" />
 
         <EditText
             android:id="@+id/card_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxLength="16"
             android:inputType="number"
             android:hint="Card Number" />
 
@@ -38,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:maxLength="4"
             android:hint="Security Code"
             />
 
@@ -51,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:entries="@array/planets_array"
+                android:entries="@array/month_array"
                 android:prompt="@string/month_prompt" />
 
             <Spinner
@@ -59,8 +61,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:entries="@array/planets_array"
-                android:prompt="@string/month_prompt" />
+                android:entries="@array/year_array"
+                android:prompt="@string/year_prompt" />
         </LinearLayout>
 
         <Button

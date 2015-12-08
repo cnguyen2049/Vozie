@@ -7,14 +7,28 @@
     <color name="teal">#4DB6AC</color>
 
     <string name="month_prompt">Pick Month</string>
-    <string-array name="planets_array">
-            <item>Mercury</item>
-            <item>Venus</item>
-            <item>Earth</item>
-            <item>Mars</item>
-            <item>Jupiter</item>
-            <item>Saturn</item>
-            <item>Uranus</item>
-            <item>Neptune</item>
+    <string name="year_prompt">Pick Year</string>
+    <string-array name="month_array">
+            <item>Jan</item>
+            <item>Feb</item>
+            <item>Mar</item>
+            <item>Apr</item>
+            <item>May</item>
+            <item>Jun</item>
+            <item>Jul</item>
+            <item>Aug</item>
+            <item>Sep</item>
+            <item>Oct</item>
+            <item>Nov</item>
+            <item>Dec</item>
     </string-array>
+    <string-array name="year_array">
+        <item>2015</item>
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+    </string-array>
+    <string name="title_activity_credit_card">CreditCard</string>
 </resources>
