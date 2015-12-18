@@ -227,6 +227,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Message msg = new Message();
                         msg.obj = adapter;
                         mHandler.sendMessage(msg);
+                        return;
                     }
 
                 } else {
@@ -234,6 +235,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Message msg = new Message();
                         msg.obj = null;
                         mHandler.sendMessage(msg);
+                        return;
                     }
                 }
             }

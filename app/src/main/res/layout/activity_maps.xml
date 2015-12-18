@@ -10,17 +10,32 @@
         android:orientation="vertical"
         android:paddingTop="10dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp" >
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp">
 
         <AutoCompleteTextView android:id="@+id/search_text"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:gravity="right"
+            android:layout_height="68dp"
+            android:textSize="16sp"
             android:padding="24dp"
+            android:gravity="right"
             android:hint="@string/search_hint"
-            android:background="@drawable/custom_bg"
-            android:completionThreshold="1"/>
+            android:background="@layout/search_bg"
+            android:completionThreshold="1"
+            android:textColorHint="#000000"/>
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:orientation="vertical">
+                <Button android:id="@+id/ride_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center_horizontal|center"
+                    android:background="@layout/ride_bg"
+                    android:text="@string/ride_label"
+                    android:textColor="#FFFFFF"/>
+            </LinearLayout>
     </LinearLayout>
 </fragment>
 

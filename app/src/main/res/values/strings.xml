@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">Vozie</string>
-    <color name="teal">#4DB6AC</color>
     <string name="title_activity_maps">Map</string>
+    <string name="ride_label">Ready To Go!</string>
+    <color name="teal">#4DB6AC</color>
 </resources>
