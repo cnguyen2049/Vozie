@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -56,6 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean network_enabled = false;
     private boolean ErrorAlertPopped = false;
     private Thread checkThread;
+    private String currentText;
 
     /*-------------------------------*/
     /* MapsActivity Callback Methods */
@@ -170,26 +173,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charsequence, int i, int j, int k) {
-                AutoCompleteTextView textView;
-                ArrayAdapter<String> adapter;
-                textView = (AutoCompleteTextView) findViewById(R.id.search_text);
-                String currentText = textView.getText().toString();
-                List<Address> addresses = resultListFromUserInput(currentText);
-
-                if (addresses != null) {
-                    String[] array = new String[addresses.size()];
-                    for (int l = 0; l < addresses.size(); l++) {
-                        Address indAddress = addresses.get(l);
-                        array[l] = indAddress.getAddressLine(0) + " "
-                                + indAddress.getAddressLine(1) + " "
-                                + indAddress.getAddressLine(2);
-                    }
-                    adapter = new ArrayAdapter<String>(MapsActivity.this,
-                            android.R.layout.simple_list_item_1, array);
-                    adapter.getFilter().filter(charsequence.toString());
-                    textView.setAdapter(adapter);
-                } else
-                    textView.setAdapter(null);
+                /* Sets global currentText and attempts to create adapter before next character
+                   is entered. */
+                currentText = charsequence.toString();
+                threadSetAdapter();
             }
 
             @Override
@@ -202,6 +189,56 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+    }
+
+    public void threadSetAdapter() {
+        final Handler mHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.search_text);
+                ArrayAdapter sendAdapter = (ArrayAdapter) msg.obj;
+
+                if (sendAdapter != null)
+                    textView.setAdapter(sendAdapter);
+                else
+                    textView.setAdapter(null);
+            }
+        };
+
+        Thread adapterThread = new Thread((new Runnable() {
+            public void run() {
+                ArrayAdapter<String> adapter;
+                List<Address> addresses = resultListFromUserInput(currentText);
+                String tText = currentText;
+
+                if (addresses != null) {
+                    String[] array = new String[addresses.size()];
+                    for (int l = 0; l < addresses.size(); l++) {
+                        Address indAddress = addresses.get(l);
+                        array[l] = indAddress.getAddressLine(0) + " "
+                                + indAddress.getAddressLine(1) + " "
+                                + indAddress.getAddressLine(2);
+                    }
+                    adapter = new ArrayAdapter<String>(MapsActivity.this,
+                            android.R.layout.simple_list_item_1, array);
+
+                    /* Before setting adapter, make sure that the text hasn't changed in separate
+                    thread */
+                    if (tText.equals(currentText)) {
+                        Message msg = new Message();
+                        msg.obj = adapter;
+                        mHandler.sendMessage(msg);
+                    }
+
+                } else {
+                    if (tText.equals(currentText)) {
+                        Message msg = new Message();
+                        msg.obj = null;
+                        mHandler.sendMessage(msg);
+                    }
+                }
+            }
+        }));
+        adapterThread.start();
     }
 
     public void initializeMap() {
@@ -294,7 +331,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             setLocMarker(location);
 
             mainMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 2));
-            mainMap.animateCamera(CameraUpdateFactory.zoomTo(16), 2000, null);
+            mainMap.animateCamera(CameraUpdateFactory.zoomTo(16), 4000, null);
         } catch (NullPointerException e) {
             connectErrorAlert("Connection Error");
         }
