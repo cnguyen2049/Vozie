@@ -17,12 +17,15 @@ import android.location.Address;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -36,6 +39,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -59,6 +64,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean ErrorAlertPopped = false;
     private Thread checkThread;
     private String currentText;
+    private CustomMarkerInfoAdapter infoAdapter;
+    private Address fromLoc, toLoc;
 
     /*-------------------------------*/
     /* MapsActivity Callback Methods */
@@ -67,6 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -144,6 +152,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 initializeMap();
             }
         }
+
+        // Create custom marker from custom_marker.xml
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        infoAdapter = new CustomMarkerInfoAdapter(inflater, this);
+        mainMap.setInfoWindowAdapter(infoAdapter);
+
+
+
+
     }
 
     public void initializeSearchBox() {
@@ -353,16 +370,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /* Resets locMarker to specified LatLng */
     public void setLocMarker(LatLng input) {
-        String title = getAddressFromLocation(input).getAddressLine(0);
-        title += ", " + getAddressFromLocation(input).getAddressLine(1);
-        title += ", " + getAddressFromLocation(input).getAddressLine(2);
+        String title = "Are you here?";
+        String snippet = getAddressFromLocation(input).getAddressLine(0);
+        snippet += ", " + getAddressFromLocation(input).getAddressLine(1);
+        snippet += ", " + getAddressFromLocation(input).getAddressLine(2);
 
         if (locMarker != null)
             locMarker.remove();
 
         locMarker = mainMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
                 .position(input)
-                .title(title));
+                .title(title)
+                .snippet(snippet));
+
+        if (mainMap != null) {
+            // Create custom marker from custom_marker.xml
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            infoAdapter = new CustomMarkerInfoAdapter(inflater, this);
+            mainMap.setInfoWindowAdapter(infoAdapter);
+        }
+
         locMarker.showInfoWindow();
     }
 
@@ -415,13 +443,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void connectErrorAlert(String error) {
+    public void connectErrorAlert(String error) {
         DialogFragment errorDialog = new ErrorAlert();
         Bundle args = new Bundle();
         args.putString("errorStr", error);
         errorDialog.setArguments(args);
         errorDialog.show(getSupportFragmentManager(), "tag");
         ErrorAlertPopped = true;
+    }
+
+    public void setFromLocation(Address inAddress) {
+        fromLoc = inAddress;
+        TextView from = (TextView) findViewById(R.id.from_text);
+        from.setText(inAddress.getAddressLine(0));
+    }
+
+    /*---------------------------*/
+    /* Button Handling Functions */
+    /*---------------------------*/
+    public void yesClick() {
+        LatLng current = new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude());
+        setFromLocation(getAddressFromLocation(current));
     }
 }
 

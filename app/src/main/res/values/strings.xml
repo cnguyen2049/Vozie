@@ -6,5 +6,10 @@
     <string name="facebook_app_id">Vozie</string>
     <string name="title_activity_maps">Map</string>
     <string name="ride_label">Ready To Go!</string>
+    <string name="yes_label">Yes</string>
+    <string name="no_label">No</string>
+    <string name="from_label">From:</string>
+    <string name="to_label">To:</string>
+    <string name="set_label">Set...</string>
     <color name="teal">#4DB6AC</color>
 </resources>
