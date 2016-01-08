@@ -117,5 +117,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void processCard(String number, int month, int year, String securityCode) {
         Card card = new Card(number, month, year, securityCode);
+
+        if(card.validateCard()){
+
+        }
+        else{
+
+        }
+
     }
 }

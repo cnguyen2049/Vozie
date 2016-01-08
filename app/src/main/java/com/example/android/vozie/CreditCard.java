@@ -8,8 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.stripe.android.Stripe;
+import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
+import com.stripe.android.model.Token;
+import com.stripe.exception.AuthenticationException;
 
 public class CreditCard extends AppCompatActivity {
     private final String LOG_TAG = CreditCard.class.getSimpleName();
@@ -114,7 +119,28 @@ public class CreditCard extends AppCompatActivity {
         return 0;
     }
 
-    public void processCard(String number, int month, int year, String securityCode) {
+    public void processCard(String number, int month, int year, String securityCode) throws AuthenticationException {
+
         Card card = new Card(number, month, year, securityCode);
+
+        Stripe stripe = new Stripe("pk_test_GPxTanwMDDjejJrMYzQFIxWf");
+        stripe.createToken(
+                card,
+                new TokenCallback() {
+                    @Override
+                    public void onError(Exception error) {
+                        Toast.makeText(getBaseContext(),
+                                error.getLocalizedMessage(),
+                        Toast.LENGTH_LONG
+                        ).show();
+                    }
+
+                    @Override
+                    public void onSuccess(Token token) {
+
+                    }
+                }
+
+        );
     }
 }
