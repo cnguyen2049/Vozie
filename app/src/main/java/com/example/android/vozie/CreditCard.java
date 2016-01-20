@@ -118,7 +118,15 @@ public class CreditCard extends AppCompatActivity {
 
         return 0;
     }
-
+    /*
+    *
+    * Handles the validation of the credit card that is imputed by the user.
+    * @param number
+    * @param month
+    * @param year
+    * @param securityCode
+    * @return void
+     */
     public void processCard(String number, int month, int year, String securityCode)
             throws AuthenticationException,Exception {
 
@@ -131,7 +139,7 @@ public class CreditCard extends AppCompatActivity {
                     new TokenCallback() {
                         @Override
                         public void onSuccess(Token token) {
-
+                            //POST request here
                         }
                         @Override
                         public void onError(Exception error) {
