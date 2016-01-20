@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.stripe.android.model.Card;
-
 public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -115,15 +113,6 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 
-    public void processCard(String number, int month, int year, String securityCode) {
-        Card card = new Card(number, month, year, securityCode);
 
-        if(card.validateCard()){
 
-        }
-        else{
-
-        }
-
-    }
 }

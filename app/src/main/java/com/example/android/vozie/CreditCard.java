@@ -119,28 +119,42 @@ public class CreditCard extends AppCompatActivity {
         return 0;
     }
 
-    public void processCard(String number, int month, int year, String securityCode) throws AuthenticationException {
+    public void processCard(String number, int month, int year, String securityCode)
+            throws AuthenticationException,Exception {
 
         Card card = new Card(number, month, year, securityCode);
+        boolean validation = card.validateCard();
+        if(validation){
+            Stripe stripe = new Stripe("pk_test_GPxTanwMDDjejJrMYzQFIxWf");
+            stripe.createToken(
+                    card,
+                    new TokenCallback() {
+                        @Override
+                        public void onSuccess(Token token) {
 
-        Stripe stripe = new Stripe("pk_test_GPxTanwMDDjejJrMYzQFIxWf");
-        stripe.createToken(
-                card,
-                new TokenCallback() {
-                    @Override
-                    public void onError(Exception error) {
-                        Toast.makeText(getBaseContext(),
-                                error.getLocalizedMessage(),
-                        Toast.LENGTH_LONG
-                        ).show();
+                        }
+                        @Override
+                        public void onError(Exception error) {
+                            Toast.makeText(getBaseContext(),
+                                    error.getLocalizedMessage(),
+                                    Toast.LENGTH_LONG
+                            ).show();
+                        }
                     }
-
-                    @Override
-                    public void onSuccess(Token token) {
-
-                    }
-                }
-
-        );
+            );
+        }
+        else if(!card.validateCard()){
+            throw new Exception("This card is not valid");
+        }
+        else if(!card.validateCVC()){
+            throw new Exception("This card is not valid");
+        }
+        else if(!card.validateExpiryDate()){
+            throw new Exception("This card is not valid");
+        }
+        else{
+            throw new Exception("This card is not valid");
+        }
     }
+
 }
