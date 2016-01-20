@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public String processText(View view) {
+    public String processText(View view) throws Exception {
 
         EditText cardNameField = (EditText) findViewById(R.id.card_name);
         String cardName = cardNameField.getText().toString();
@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 " " + month_int;
         Log.v(LOG_TAG, output);
 
+        CreditCard card = new CreditCard();
+        card.processCard(cardNumber,month_int,year_int, securityCode);
         return output;
     }
 
