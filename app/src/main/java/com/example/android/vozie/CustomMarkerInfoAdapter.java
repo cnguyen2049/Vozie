@@ -3,16 +3,19 @@ package com.example.android.vozie;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
-public class CustomMarkerInfoAdapter implements GoogleMap.InfoWindowAdapter, View.OnClickListener {
+public class CustomMarkerInfoAdapter implements GoogleMap.InfoWindowAdapter {
     MapsActivity mainActivity;
     LayoutInflater layoutInflater;
+    View v;
 
     public CustomMarkerInfoAdapter(LayoutInflater inputInflater, MapsActivity inActivity) {
         mainActivity = inActivity;
@@ -26,10 +29,7 @@ public class CustomMarkerInfoAdapter implements GoogleMap.InfoWindowAdapter, Vie
 
     @Override
     public View getInfoContents(Marker arg0) {
-        View v = layoutInflater.inflate(R.layout.custom_marker, null);
-
-        Button yesButton = (Button) v.findViewById(R.id.yes_button);
-        yesButton.setOnClickListener(this);
+        v = layoutInflater.inflate(R.layout.custom_marker, null);
 
         TextView titleView = (TextView) v.findViewById(R.id.title);
         TextView snippetView = (TextView) v.findViewById(R.id.snippet);
@@ -42,13 +42,10 @@ public class CustomMarkerInfoAdapter implements GoogleMap.InfoWindowAdapter, Vie
         return v;
     }
 
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.yes_button:
-                mainActivity.yesClick();
-                break;
-        }
+    public int getWidth() {
+        if (v != null)
+            return v.getWidth();
+        else
+            return 0;
     }
-
-
 }

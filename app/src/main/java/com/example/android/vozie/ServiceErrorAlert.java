@@ -7,19 +7,15 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
-public class ErrorAlert extends DialogFragment {
-    private final String errorStr;
+public class ServiceErrorAlert extends DialogFragment {
+    private final String message = "Problem connecting to Google Play Services. Please check it " +
+            "is active and try again";
     private final String retry = "Retry";
     private final String exit = "Exit";
 
-    public ErrorAlert() {
-        errorStr = "Connection Error";
-    }
-
     public interface NoticeDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
-
-        public void onDialogNegativeClick(DialogFragment dialog);
+        public void serviceRetryClick(android.support.v4.app.DialogFragment dialog);
+        public void serviceExitClick(android.support.v4.app.DialogFragment dialog);
     }
 
     // Use this instance of the interface to deliver action events
@@ -42,23 +38,20 @@ public class ErrorAlert extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Build the dialog and set up the button click handlers
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        MapsActivity activity = (MapsActivity) getActivity();
 
-        builder.setMessage(errorStr)
+        builder.setMessage(message)
                 .setPositiveButton(retry, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // Send the positive button event back to the host activity
-                        mListener.onDialogPositiveClick(ErrorAlert.this);
+                        mListener.serviceRetryClick(ServiceErrorAlert.this);
                     }
                 })
                 .setNegativeButton(exit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // Send the negative button event back to the host activity
-                        mListener.onDialogNegativeClick(ErrorAlert.this);
+                        mListener.serviceExitClick(ServiceErrorAlert.this);
                     }
                 });
+
         return builder.create();
     }
 }

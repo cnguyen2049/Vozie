@@ -1,46 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:orientation="vertical" android:padding="8dp">
+    android:id="@+id/custom_marker" android:layout_width="250dp"
+    android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_gravity="center"/>
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/snippet"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textColor="#ff7f7f7f"
         android:textSize="14sp"
-        android:padding="12dp"/>
-
-    <LinearLayout android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <Button android:id="@+id/yes_button"
-            android:layout_width="fill_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="@layout/yes_bg"
-            android:text="@string/yes_label"
-            android:textColor="#FFFFFF"
-            android:layout_marginEnd="40dp"/>
-        <Button android:id="@+id/no_button"
-            android:layout_width="fill_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="@layout/no_bg"
-            android:text="@string/no_label"
-            android:textColor="#FFFFFF"
-            android:layout_marginStart="40dp"/>
-    </LinearLayout>
+        android:padding="12dp"
+        android:gravity="center"/>
 </LinearLayout>

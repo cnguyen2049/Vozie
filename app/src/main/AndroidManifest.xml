@@ -44,11 +44,11 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB2JA8JTS8VhLgHlnG_VJeeWIgeNWJd0oI" />
+            android:value="AIzaSyBa3tS4VV9gM1REDrnoaAEqy_drU2dRGDA" />
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" >
+            android:label="@string/title_activity_maps" android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 

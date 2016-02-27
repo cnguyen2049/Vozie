@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Vozie</string>
     <string name="search_hint">Where are you going?</string>
+    <string name="search_main_hint">Search for address...</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">Vozie</string>
@@ -11,5 +12,10 @@
     <string name="from_label">From:</string>
     <string name="to_label">To:</string>
     <string name="set_label">Set...</string>
+    <string name="from_search_label">Set Pickup Location</string>
+    <string name="to_search_label">Set Destination</string>
+    <string name="search_title">Search For Location</string>
+
     <color name="teal">#4DB6AC</color>
+    <string name="title_activity_search_activity_real">Map</string>
 </resources>
