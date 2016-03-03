@@ -73,6 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ConnectionErrorAlert.NoticeDialogListener, ServiceErrorAlert.NoticeDialogListener{
 
     private final int MAX_RESULTS = 50;
+    private final int SEARCH_RADIUS = 30;  // Radius in miles
 
     private GoogleMap mainMap;
     private GoogleApiClient mGoogleApiClient;
@@ -728,10 +729,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
 
         try {
-            List<Address> addressList = geoCoder.getFromLocationName(input, MAX_RESULTS, 25, -125, 50, -63);
+            double lowerLeftLat = currentLocation.getLatitude()
+                    - getRadialDegreeDistance("Lat");
+            double lowerLeftLong = currentLocation.getLongitude()
+                    - getRadialDegreeDistance("Long");
+            double upperRightLat = currentLocation.getLatitude()
+                    + getRadialDegreeDistance("Lat");
+            double upperRightLong = currentLocation.getLongitude()
+                    + getRadialDegreeDistance("Long");
 
-            if (addressList.size() > 0)
+            List<Address> addressList = geoCoder.getFromLocationName(input, MAX_RESULTS,
+                    lowerLeftLat, lowerLeftLong, upperRightLat, upperRightLong);
+
+            if (addressList.size() > 0) {
+                if (addressList.size() > 1)
+                    addressList = sortAddressesByDistance(addressList);
                 return addressList;
+            }
             return null;
 
         } catch (IOException e) {
@@ -739,6 +753,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return null;
         }
     }
+
+    public double getRadialDegreeDistance(String param) {
+        switch (param) {
+            case "Lat":
+                return (1 / 110.54) * SEARCH_RADIUS * 0.621371;
+            case "Long":
+                return (1 / (111.320 * Math.cos(currentLocation.getLatitude())))
+                        * SEARCH_RADIUS * 0.621371;
+            default:
+                return 0;
+        }
+    }
+
+    public List<Address> sortAddressesByDistance(List<Address> input) {
+        int array[] = new int[input.size()];
+        List<Address> returnList;
+        Location addrLoc = new Location("i-addr");
+
+        // Fill distance array with data
+        for (int i = 0; i < input.size(); i++) {
+            addrLoc.setLatitude(input.get(i).getLatitude());
+            addrLoc.setLongitude(input.get(i).getLongitude());
+            array[i] = Math.round(currentLocation.distanceTo(addrLoc));
+        }
+
+        Quicksort sorter = new Quicksort();
+        return sorter.sort(array, input);
+    }
+
+
 
     public void setFromLocation(Address inAddress, LatLng loc) {
         fromLoc = inAddress;
@@ -949,6 +993,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         deactivateMapMode();
         deactivateSearchMode();
         searchModeSearchText.setText("");
+    }
+
+    public class Quicksort  {
+        private int[] numbers;
+        private int number;
+        private List<Address> list;
+
+        public List<Address> sort(int[] values, List<Address> addrList) {
+            if (values == null || values.length == 0){
+                return null;
+            }
+
+            this.list = addrList;
+            this.numbers = values;
+            number = values.length;
+            quicksort(0, number - 1);
+
+            return list;
+        }
+
+        private void quicksort(int low, int high) {
+            int i = low, j = high;
+
+            int pivot = numbers[low + (high-low)/2];
+
+            while (i <= j) {
+                while (numbers[i] < pivot) {
+                    i++;
+                }
+                while (numbers[j] > pivot) {
+                    j--;
+                }
+
+                if (i <= j) {
+                    exchange(i, j);
+                    i++;
+                    j--;
+                }
+            }
+
+            if (low < j)
+                quicksort(low, j);
+            if (i < high)
+                quicksort(i, high);
+        }
+
+        private void exchange(int i, int j) {
+            Address tAddr = list.get(i);
+            int temp = numbers[i];
+
+            list.set(i, list.get(j));
+            numbers[i] = numbers[j];
+
+            list.set(j, tAddr);
+            numbers[j] = temp;
+        }
     }
 }
 
