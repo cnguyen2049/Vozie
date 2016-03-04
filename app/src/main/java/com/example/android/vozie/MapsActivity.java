@@ -281,7 +281,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             setYesNoCoordinates(p);
                         }
                     });
-                    SystemClock.sleep(3);
+                    try {
+                        Thread.currentThread().sleep(1);
+                    } catch (InterruptedException e) { }
                 }
             }
         }).start();
@@ -618,7 +620,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     else if (!gps_enabled || !network_enabled)
                         connectionError();
 
-                    SystemClock.sleep(5000);
+                    try {
+                        Thread.currentThread().sleep(5000);
+                    } catch (InterruptedException e) { }
                 }
             }
         });
@@ -661,13 +665,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void setLocMarker(LatLng input) {
         String title, snippet;
 
-        if (map_mode) {
+        if (map_mode || search_mode) {
             title = "Location Selected";
             snippet = getAddressFromLocation(input).getAddressLine(0);
             snippet += ", " + getAddressFromLocation(input).getAddressLine(1);
         }
         else {
-            title = "Are you here?";
+            title = "Set Pickup Location?";
             snippet = getAddressFromLocation(input).getAddressLine(0);
             snippet += ", " + getAddressFromLocation(input).getAddressLine(1);
             snippet += ", " + getAddressFromLocation(input).getAddressLine(2);

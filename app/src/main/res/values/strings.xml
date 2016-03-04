@@ -11,7 +11,8 @@
     <string name="no_label">No</string>
     <string name="from_label">From:</string>
     <string name="to_label">To:</string>
-    <string name="set_label">Set...</string>
+    <string name="from">Pickup...</string>
+    <string name="to">Dropoff...</string>
     <string name="from_search_label">Set Pickup Location</string>
     <string name="to_search_label">Set Destination</string>
     <string name="search_title">Search For Location</string>

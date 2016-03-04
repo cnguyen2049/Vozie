@@ -7,13 +7,38 @@
     <LinearLayout android:id="@+id/main_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:elevation="10dp">
+        android:orientation="vertical">
+
+        <RelativeLayout android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:background="#FFF"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
+            <ImageView android:id="@+id/vozie_logo"
+                android:layout_width="300dp"
+                android:layout_height="80dp"
+                android:src="@drawable/vozie_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"/>
+            <ImageView android:id="@+id/menu_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/menu_button"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
+            <ImageView android:id="@+id/settings_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/settings_button"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
 
         <AutoCompleteTextView android:id="@+id/search_text"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="68dp"
+            android:layout_margin="10dp"
             android:textSize="16sp"
             android:padding="24dp"
             android:hint="@string/search_hint"
@@ -22,71 +47,57 @@
             android:gravity="end"
             android:textColorHint="#000000"/>
 
-        <LinearLayout android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="bottom"
-            android:orientation="vertical">
-
+        <RelativeLayout android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <LinearLayout android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/from_text"
-                    android:layout_width="fill_parent"
-                    android:layout_weight="1"
+                android:layout_height="150dp"
+                android:layout_alignParentBottom="true"
+                android:background="#99707070"
+                android:orientation="vertical">
+
+                <LinearLayout android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/from_label"
-                    android:textSize="21sp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:textColor="#000000"/>
-                <TextView
-                    android:id="@+id/to_text"
+                    android:orientation="horizontal">
+                    <Button android:id="@+id/from_button"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/from"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/tofrom_bg"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginBottom="6dp"/>
+                    <Button android:id="@+id/to_button"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/to"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/tofrom_bg"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginBottom="6dp"/>
+                </LinearLayout>
+
+                <Button android:id="@+id/ride_button"
                     android:layout_width="fill_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="@string/to_label"
-                    android:textSize="21sp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:textColor="#000000"/>
+                    android:layout_height="75dp"
+                    android:layout_gravity="center_horizontal|center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/ride_bg"
+                    android:text="@string/ride_label"
+                    android:textColor="#FFFFFF"/>
             </LinearLayout>
-
-            <LinearLayout android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <Button android:id="@+id/from_button"
-                    android:layout_width="fill_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/set_label"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textColor="#FFFFFF"
-                    android:background="@drawable/tofrom_bg"/>
-                <Button android:id="@+id/to_button"
-                    android:layout_width="fill_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/set_label"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textColor="#FFFFFF"
-                    android:background="@drawable/tofrom_bg"/>
-            </LinearLayout>
-
-            <Button android:id="@+id/ride_button"
-                android:layout_width="fill_parent"
-                android:layout_height="75dp"
-                android:layout_gravity="center_horizontal|center"
-                android:background="@drawable/ride_bg"
-                android:text="@string/ride_label"
-                android:textColor="#FFFFFF"/>
-
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
     <RelativeLayout android:id="@+id/search_relative_layout"
@@ -206,6 +217,7 @@
         android:layout_height="0dp"
         android:background="@drawable/yes_bg_handler"
         android:text="@string/yes_label"
+        android:fontFamily="sans-serif-thin"
         android:textColor="#FFFFFF"
         android:elevation="5dp"/>
     <Button android:id="@+id/no_button"
@@ -213,6 +225,7 @@
         android:layout_height="0dp"
         android:background="@drawable/no_bg_handler"
         android:text="@string/no_label"
+        android:fontFamily="sans-serif-thin"
         android:textColor="#FFFFFF"
         android:elevation="5dp"/>
 </fragment>
