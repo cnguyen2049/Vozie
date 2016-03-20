@@ -2,6 +2,7 @@ package com.example.android.vozie;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -101,7 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private Address fromLoc, toLoc, selectedLoc;
 
-    private Thread checkConnectionThread, adapterThread, searchModeAdapterThread;
+    private Thread checkConnectionThread, adapterThread;
 
     /*-------------------------------*/
     /* MapsActivity Callback Methods */
@@ -323,14 +324,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         searchModeSearchText.setClickable(true);
         searchModeSearchText.setEnabled(true);
 
-        resultList.setOnItemClickListener(
-            new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-                    selectedLoc = currentSearchResults[position];
-                    activateMapMode();
+        resultList.setOnItemClickListener (
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+                        selectedLoc = currentSearchResults[position];
+                        activateMapMode();
+                    }
                 }
-            }
         );
 
         searchModeSearchText.setOnTouchListener(new View.OnTouchListener() {
@@ -348,67 +349,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         searchModeSearchText.addTextChangedListener(new TextWatcher() {
+            Thread resultAdapterThread = null;
+
             @Override
             public void onTextChanged(CharSequence charsequence, int i, int j, int k) {
-                /* Sets global searchModeCurrentText and attempts to create adapter before next character
-                   is entered. */
-                deactivateMapMode();
                 searchModeCurrentText = charsequence.toString();
-                final Handler mHandler = new Handler() {
-                    public void handleMessage(Message msg) {
-                        ArrayAdapter sendAdapter = (ArrayAdapter) msg.obj;
 
-                        if (sendAdapter != null)
-                            resultList.setAdapter(sendAdapter);
-                        else
-                            resultList.setAdapter(null);
-                    }
-                };
+                if (resultAdapterThread != null)
+                    if (resultAdapterThread.isAlive())
+                        resultAdapterThread.interrupt();
 
-                searchModeAdapterThread = new Thread((new Runnable() {
+                resultAdapterThread = new Thread((new Runnable() {
+                    String[] strArr;
+
+                    @Override
                     public void run() {
-                        ArrayAdapter<String> adapter;
+                        if (map_mode)
+                            deactivateMapMode();
                         List<Address> addresses = resultListFromUserInput(searchModeCurrentText);
-                        String tText = searchModeCurrentText;
 
                         if (addresses != null) {
-                            String[] array = new String[addresses.size()];
+                            strArr = new String[addresses.size()];
+                            for (int l = 0; l < addresses.size(); l++) {
+                                Address indAddress = addresses.get(l);
+                                currentSearchResults[l] = indAddress;
 
-                            if (searchModeCurrentText.equals("") || searchModeCurrentText == null) {
-                                adapter = null;
-                            }
-                            else {
-                                for (int l = 0; l < addresses.size(); l++) {
-                                    Address indAddress = addresses.get(l);
-                                    currentSearchResults[l] = indAddress;
-                                    array[l] = indAddress.getAddressLine(0) + " "
-                                            + indAddress.getAddressLine(1) + " "
-                                            + indAddress.getAddressLine(2);
-                                }
-
-                                adapter = new ArrayAdapter<String>(MapsActivity.this,
-                                        android.R.layout.simple_list_item_1, array);
-                            }
-
-                            if (tText.equals(searchModeCurrentText)) {
-                                Message msg = new Message();
-                                msg.obj = adapter;
-                                mHandler.sendMessage(msg);
-                                return;
-                            }
-                        } else {
-                            if (tText.equals(searchModeCurrentText)) {
-                                Message msg = new Message();
-                                msg.obj = null;
-                                mHandler.sendMessage(msg);
-                                return;
+                                strArr[l] = indAddress.getAddressLine(0) + " "
+                                        + indAddress.getAddressLine(1) + " "
+                                        + indAddress.getAddressLine(2);
                             }
                         }
 
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (strArr != null) {
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MapsActivity.this,
+                                            android.R.layout.simple_list_item_1, strArr);
+                                    resultList.setAdapter(adapter);
+                                }
+                            }
+                        });
                     }
                 }));
 
-                searchModeAdapterThread.start();
+                resultAdapterThread.start();
             }
 
             @Override
