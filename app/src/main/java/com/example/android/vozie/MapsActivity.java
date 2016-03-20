@@ -1,5 +1,6 @@
 package com.example.android.vozie;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.location.Location;
 import android.location.Geocoder;
 import android.location.Address;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -31,6 +33,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -75,34 +78,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private final int MAX_RESULTS = 50;
     private final int SEARCH_RADIUS = 30;  // Radius in miles
+    private final String[] drawerItems = {"Account", "Payment", "History", "Notifications",
+            "Settings", "About"};
 
     private GoogleMap mainMap;
     private GoogleApiClient mGoogleApiClient;
-
     private Location currentLocation;
     private LocationRequest mLocationRequest;
     private LocationManager lm;
-
     private Marker locMarker;
     private CustomMarkerInfoAdapter infoAdapter;
-
     private Button yesButton, noButton, toButton, fromButton, rideButton, setAsFromButton, setAsToButton;
+    private ImageView menuImage;
     private LinearLayout mainLayout, searchLayout, setButtonLayout;
     private RelativeLayout searchRelativeLayout;
     private EditText searchModeSearchText;
     private AutoCompleteTextView searchText;
-    private String currentText, searchModeCurrentText;
-    private Address currentSearchResults[];
-    private ListView resultList;
+    private ListView resultList, drawerList;
     private TextView topRect, bottomRect, leftRect, rightRect, mapModeAddressText, mapModeDistanceText;
-
     private DialogFragment connectionErrorDialog, serviceErrorDialog;
+    private SupportMapFragment mapFragment;
+    private DrawerLayout drawerLayout;
 
-    private boolean service_enabled, gps_enabled, network_enabled, search_mode, map_mode;
-
+    private Address currentSearchResults[];
     private Address fromLoc, toLoc, selectedLoc;
+    private String currentText, searchModeCurrentText;
 
     private Thread checkConnectionThread, adapterThread;
+
+    private boolean service_enabled, gps_enabled, network_enabled, search_mode, map_mode;
 
     /*-------------------------------*/
     /* MapsActivity Callback Methods */
@@ -113,7 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         initializeErrorAlertDialogs();
@@ -248,6 +252,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         initializeRideButton();
         initializeBorderRects();
         initializeSearchModeSearchBox();
+        initializeDrawer();
+        initializeMenuBar();
 
         mainLayout = (LinearLayout) findViewById(R.id.main_linear_layout);
         searchLayout = (LinearLayout) findViewById(R.id.search_layout);
@@ -256,6 +262,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mapModeAddressText = (TextView) findViewById(R.id.map_mode_address_text);
         mapModeDistanceText = (TextView) findViewById(R.id.map_mode_distance_text);
+    }
+
+    public void initializeDrawer() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerList = (ListView) findViewById(R.id.left_drawer);
+
+        drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, drawerItems));
+    }
+
+    public void initializeMenuBar() {
+        menuImage = (ImageView) findViewById(R.id.menu_button);
+
+        menuImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(drawerList);
+            }
+        });
     }
 
     public void initializeErrorAlertDialogs() {
