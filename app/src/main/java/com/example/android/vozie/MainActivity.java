@@ -40,8 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    /*
+    NOTE TO Chris(Yourself) Think of moving this code to another class when you have a chance
 
+     */
     public String processText(View view) throws Exception {
+        CreditCard card = new CreditCard();
 
         EditText cardNameField = (EditText) findViewById(R.id.card_name);
         String cardName = cardNameField.getText().toString();
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         String year_string = year_spinner.getSelectedItem().toString();
         Integer year_int = Integer.parseInt(year_string);
 
-        Integer month_int = getIntMonthFromString(month_string);
+        Integer month_int = card.getIntMonthFromString(month_string);
 
         if(month_int == 0){
             return null;
@@ -68,53 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 " " + month_int;
         Log.v(LOG_TAG, output);
 
-        CreditCard card = new CreditCard();
+
         card.processCard(cardNumber,month_int,year_int, securityCode);
         return output;
     }
-
-    public int getIntMonthFromString(String month) {
-        switch (month) {
-            case "Jan":
-                return 1;
-
-            case "Feb":
-                return 2;
-
-            case "Mar":
-                return 3;
-
-            case "Apr":
-                return 4;
-
-            case "May":
-                return 5;
-
-            case "Jun":
-                return 6;
-
-            case "Jul":
-                return 7;
-
-            case "Aug":
-                return 8;
-
-            case "Sep":
-                return 9;
-
-            case "Oct":
-                return 10;
-
-            case "Nov":
-                return 11;
-
-            case "Dec":
-                return 12;
-        }
-
-        return 0;
-    }
-
 
 
 }
