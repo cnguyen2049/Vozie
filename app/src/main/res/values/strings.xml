@@ -16,7 +16,7 @@
     <string name="from_search_label">Set Pickup Location</string>
     <string name="to_search_label">Set Destination</string>
     <string name="search_title">Search For Location</string>
-
+    <string name="google_app_id">AIzaSyB2JA8JTS8VhLgHlnG_VJeeWIgeNWJd0oI</string>
     <color name="teal">#4DB6AC</color>
     <string name="title_activity_search_activity_real">Map</string>
 </resources>

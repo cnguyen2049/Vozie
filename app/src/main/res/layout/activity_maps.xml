@@ -44,7 +44,7 @@
 
                 <AutoCompleteTextView android:id="@+id/search_text"
                     android:layout_width="match_parent"
-                    android:layout_height="68dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:textSize="16sp"
                     android:padding="24dp"
@@ -66,7 +66,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <Button android:id="@+id/from_button"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -79,7 +79,7 @@
                                 android:layout_marginStart="16dp"
                                 android:layout_marginBottom="6dp"/>
                             <Button android:id="@+id/to_button"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
