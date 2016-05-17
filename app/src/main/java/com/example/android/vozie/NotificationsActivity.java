@@ -2,7 +2,10 @@ package com.example.android.vozie;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,18 +34,24 @@ public class NotificationsActivity extends Activity {
     private ListView mListView;
     private ListViewAdapter mAdapter;
     private Context mContext = this;
+    private Handler mHandler;
+    private List<Thread> flashThreads;
+    private List<TextView> threadID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_notifications);
 
+    mHandler = new Handler();
     mListView = (ListView) findViewById(R.id.main_list);
 
     List<NotificationsItem> items = new ArrayList<NotificationsItem>();
+    flashThreads = new ArrayList<Thread>();
+    threadID = new ArrayList<TextView>();
 
     items.add(new NotificationsItem("Your trip from 3002 Ironside Ct, San Jose CA to 7576 Juniper Lane has concluded", 1));
-    items.add(new NotificationsItem("text2", 2));
+    items.add(new NotificationsItem("This is an alert lol", 2));
     items.add(new NotificationsItem("text3", 3));
     items.add(new NotificationsItem("text4", 4));
     items.add(new NotificationsItem("text5", 5));
@@ -161,36 +171,38 @@ public class NotificationsActivity extends Activity {
 
         @Override
         public View generateView(int position, ViewGroup parent) {
-            View v;
+            View v = LayoutInflater.from(mContext).inflate(R.layout.trip_confirmed_notification, parent, false);
+            LinearLayout topPanel = (LinearLayout) v.findViewById(getSwipeLayoutResourceId(position)).findViewById(R.id.top_panel);
+            TextView titleView = (TextView) v.findViewById(getSwipeLayoutResourceId(position)).findViewById(R.id.title);
 
             switch (notificationsItems.get(position).itemsType) {
                 case TRIP_CONFIRMED:
                     title = "Trip Confirmed";
-                    v = LayoutInflater.from(mContext).inflate(R.layout.trip_confirmed_notification, parent, false);
+                    setLayoutColor(topPanel, Color.parseColor("#FFB9604F"));
+                    flashComponent(titleView);
                     break;
                 case TRIP_COMPLETED:
                     title = "Journey Completed";
-                    v = LayoutInflater.from(mContext).inflate(R.layout.trip_completed_notification, parent, false);
+                    setLayoutColor(topPanel, Color.parseColor("#FFC693A7"));
                     break;
                 case PAYMENT_ADDED:
                     title = "New Payment Method";
-                    v = LayoutInflater.from(mContext).inflate(R.layout.trip_confirmed_notification, parent, false);
+                    setLayoutColor(topPanel, Color.parseColor("#FFD06764"));
                     break;
                 case PAYMENT_RECEIVED:
                     title = "Payment Received";
-                    v = LayoutInflater.from(mContext).inflate(R.layout.trip_confirmed_notification, parent, false);
+                    setLayoutColor(topPanel, Color.parseColor("#FFD0754F"));
                     break;
                 case SUB_ADDED:
                     title = "New Subscription Added";
-                    v = LayoutInflater.from(mContext).inflate(R.layout.trip_confirmed_notification, parent, false);
+                    setLayoutColor(topPanel, Color.parseColor("#FFD0546E"));
                     break;
                 case DRIVER_ARRIVED:
                     title = "Your Driver Has Arrived!";
-                    v = LayoutInflater.from(mContext).inflate(R.layout.trip_confirmed_notification, parent, false);
+                    setLayoutColor(topPanel, Color.parseColor("#FFD06F66"));
                     break;
                 default:
                     title = "Notification";
-                    v = LayoutInflater.from(mContext).inflate(R.layout.trip_confirmed_notification, parent, false);
                     break;
             }
 
@@ -216,6 +228,39 @@ public class NotificationsActivity extends Activity {
             return v;
         }
 
+        public void flashComponent(final TextView v) {
+            final int MAX_RADIUS = 4;
+            final int INTERVAL = 500;
+
+            flashThreads.add(new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                if (v.getTag() == null)
+                                    v.setTag(true);
+
+                                float rad = v.getShadowRadius();
+                                boolean tag = (boolean) v.getTag();
+
+                                if (tag)
+                                    v.setShadowLayer(rad + 1, 2, 2, Color.parseColor("#FFFFFF"));
+                                else if (!tag)
+                                    v.setShadowLayer(rad - 1, 2, 2, Color.parseColor("#FFFFFF"));
+                                if (rad == MAX_RADIUS)
+                                    v.setTag(false);
+                                else if (rad == 1)
+                                    v.setTag(true);
+                            }
+                        });
+                        try { Thread.currentThread().sleep(INTERVAL); } catch (Exception e) {}
+                    }
+                }
+            }));
+
+            flashThreads.get(0).start();
+        }
         @Override
         public void fillValues(int position, View convertView) {
             TextView t2 = (TextView)convertView.findViewById(R.id.title);
@@ -238,6 +283,14 @@ public class NotificationsActivity extends Activity {
         @Override
         public long getItemId(int position) {
             return position;
+        }
+
+        public void setLayoutColor(final LinearLayout l, final int c) {
+            mHandler.post(new Runnable() {
+                public void run() {
+                    l.setBackgroundColor(c);
+                }
+            });
         }
     }
 }
