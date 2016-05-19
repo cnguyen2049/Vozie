@@ -9,25 +9,9 @@
     <!-- Bottom View Start-->
     <LinearLayout
         android:orientation="horizontal"
-        android:id="@+id/bottom_wrapper"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="start"
-        android:weightSum="1">
-        <ImageView android:src="@drawable/trip"
-            android:id="@+id/trip"
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:layout_weight="0.5"
-            android:padding="20dp"
-            android:background="#D3D3D3"/>
-        <ImageView android:src="@drawable/delete"
-            android:id="@+id/delete"
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:layout_weight="0.5"
-            android:padding="20dp"
-            android:background="#99CFE0"/>
+        android:id="@+id/bottom_panel"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
     </LinearLayout>
     <!-- Bottom View End-->
 
@@ -51,8 +35,7 @@
                 android:paddingTop="10dp"
                 android:paddingStart="10dp"
                 android:gravity="start"
-                android:text="04/07"
-                android:layout_weight="1"/>
+                android:layout_weight="0.5"/>
             <TextView
                 android:id="@+id/title"
                 android:textStyle="bold"
@@ -78,8 +61,7 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="10dp"
                 android:gravity="end"
-                android:layout_weight="1"
-                android:text="7:39 PM"/>
+                android:layout_weight="0.5"/>
         </LinearLayout>
         <TextView
             android:id="@+id/description"
