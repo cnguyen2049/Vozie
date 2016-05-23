@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    swipe:leftEdgeSwipeOffset="0dp"
+    swipe:rightEdgeSwipeOffset="0dp">
+    <!-- Bottom View Start-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/bottom_panel"
+        android:layout_width="150dp"
+        android:layout_height="match_parent">
+        <ImageView android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:padding="10dp"
+            android:src="@drawable/edit"
+            android:background="#FFFFFF"/>
+        <ImageView android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:padding="10dp"
+            android:src="@drawable/delete"
+            android:background="#FFFFFF"/>
+    </LinearLayout>
+    <!-- Bottom View End-->
+
+    <!-- Surface View Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/top_panel"
+        android:background="@drawable/payment_top_panel_background"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/payment_top_panel_border"
+            android:padding="10dp">
+            <ImageView android:id="@+id/card_image"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"/>
+            <LinearLayout android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:weightSum="2">
+                <RelativeLayout android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="14dp"
+                        android:textColor="#000000"
+                        android:text="John Smith"
+                        android:layout_gravity="start"/>
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="14dp"
+                        android:textColor="#000000"
+                        android:text="4/07"
+                        android:layout_alignParentEnd="true"/>
+                </RelativeLayout>
+                <TextView android:id="@+id/card_number"
+                    android:layout_height="0dp"
+                    android:layout_width="wrap_content"
+                    android:textColor="#000000"
+                    android:text="XXXX-XXXX-XXXX-0459"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="16dp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <!-- Surface View End -->
+</com.daimajia.swipe.SwipeLayout>

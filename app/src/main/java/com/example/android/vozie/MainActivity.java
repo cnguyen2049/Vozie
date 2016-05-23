@@ -1,5 +1,6 @@
 package com.example.android.vozie;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -14,6 +15,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
+
+        Intent intent = new Intent(this, PaymentActivity.class);
+        startActivity(intent);
     }
 
     @Override
